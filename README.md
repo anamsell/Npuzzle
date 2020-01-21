@@ -1,0 +1,2 @@
+# Npuzzle
+N-puzzle
