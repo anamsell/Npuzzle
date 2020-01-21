@@ -6,7 +6,7 @@ def manhattan_distance(puzzle, puzzle_solution):
         for index2, value in enumerate(line):
             if value == 0:
                 continue
-            score += abs(index1 - puzzle_solution[value - 1][0]) + abs(index2 - puzzle_solution[value - 1][1])
+            score += abs(index1 - puzzle_solution[value - 1][1]) + abs(index2 - puzzle_solution[value - 1][0])
     return score
 
 

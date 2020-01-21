@@ -14,51 +14,69 @@ def get_lowest_score(puzzles):
     return best_puzzle
 
 
-def adding_close_list(puzzle, close_list):
-    for i in list(puzzle)[:1]:
-        if i not in close_list.keys():
-            close_list[i] = dict()
-        close_list = close_list[i]
+def adding_close_set(puzzle, close_set):
+    puzzle = puzzle.flat[:-1]
+    for val in puzzle:
+        if val not in list(close_set.keys()):
+            close_set[val] = dict()
+        close_set = close_set[val]
 
 
-def puzzle_moves(puzzle_original, size, f, indexes_solution, historic):
+def is_in_close_set(puzzle, close_set):
+    value = 1
+    puzzle = puzzle.flat[:-1]
+    for val in puzzle:
+        if val not in list(close_set.keys()):
+            close_set[val] = dict()
+            value = 0
+        close_set = close_set[val]
+    return value
+
+
+def puzzle_moves(puzzle_original, size, f, indexes_solution, close_set):
     puzzles = []
     x, y = np.where(puzzle_original.puzzle == 0)
     if x != 0:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x - 1, y]
         new_puzzle.puzzle[x - 1, y] = 0
-
-        puzzles += [State(new_puzzle.puzzle, f, indexes_solution, historic + 'L')]
+        if not is_in_close_set(new_puzzle.puzzle, close_set):
+            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'L')]
     if x != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x + 1, y]
         new_puzzle.puzzle[x + 1, y] = 0
-        puzzles += [State(new_puzzle.puzzle, f, indexes_solution, historic + 'R')]
+        if not is_in_close_set(new_puzzle.puzzle, close_set):
+            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'R')]
     if y != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x, y + 1]
         new_puzzle.puzzle[x, y + 1] = 0
-        puzzles += [State(new_puzzle.puzzle, f, indexes_solution, historic + 'D')]
+        if not is_in_close_set(new_puzzle.puzzle, close_set):
+            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'D')]
     if y != 0:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x, y - 1]
         new_puzzle.puzzle[x, y - 1] = 0
-        puzzles += [State(new_puzzle.puzzle, f, indexes_solution, historic + 'U')]
+        if not is_in_close_set(new_puzzle.puzzle, close_set):
+            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'U')]
     return puzzles
 
 
 def resolve(puzzle, size, puzzle_solution, function_heuristic, indexes_solution):
-    historic = ""
-    puzzle = State(puzzle, function_heuristic, indexes_solution, historic)
-    open_list = puzzle_moves(puzzle, size, function_heuristic, indexes_solution, historic)
-    close_list = dict()
+    puzzle = State(puzzle, function_heuristic, indexes_solution, '')
+    close_set = dict()
+    adding_close_set(puzzle.puzzle, close_set)
+    open_list = puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set)
     while open_list:
         if np.array_equal(puzzle.puzzle, puzzle_solution):
+            print(puzzle.historic)
             return puzzle
         puzzle = get_lowest_score(open_list)
-        adding_close_list(puzzle.puzzle, close_list)
-        open_list += puzzle_moves(puzzle, size, function_heuristic, indexes_solution, historic)
+        open_list.remove(puzzle)
+        adding_close_set(puzzle.puzzle, close_set)
+        open_list += puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set)
+    print("Probleme")
 
 
 def puzzle_gen(size):
@@ -86,7 +104,7 @@ def parser(filename):
             line = line.split(" ")
             line = [empty for empty in line if empty != ""]
             if size == 0:
-                if not line[0].isnumeric():
+                if not line[0].isdigit():
                     exit()
                 size = int(line[0])
                 max_puzzle = size * size - 1
