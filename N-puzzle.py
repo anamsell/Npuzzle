@@ -4,6 +4,7 @@ import Heuristic
 import copy
 from End_Puzzle import puzzle_solution_generator
 from State import State
+import heapq as hq
 
 
 def get_lowest_score(puzzles):
@@ -33,50 +34,52 @@ def is_in_close_set(puzzle, close_set):
     return value
 
 
-def puzzle_moves(puzzle_original, size, f, indexes_solution, close_set):
-    puzzles = []
+def puzzle_moves(puzzle_original, size, f, indexes_solution, close_set, open_set):
     x, y = np.where(puzzle_original.puzzle == 0)
     if x != 0:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x - 1, y]
         new_puzzle.puzzle[x - 1, y] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'L')]
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'D')
+            hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
     if x != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x + 1, y]
         new_puzzle.puzzle[x + 1, y] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'R')]
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'U')
+            hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
     if y != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x, y + 1]
         new_puzzle.puzzle[x, y + 1] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'D')]
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'R')
+            hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
     if y != 0:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x, y - 1]
         new_puzzle.puzzle[x, y - 1] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            puzzles += [State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'U')]
-    return puzzles
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'L')
+            hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
 
 
 def resolve(puzzle, size, puzzle_solution, function_heuristic, indexes_solution):
     puzzle = State(puzzle, function_heuristic, indexes_solution, '')
     close_set = dict()
+    open_set = []
     adding_close_set(puzzle.puzzle, close_set)
-    open_list = puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set)
-    while open_list:
+    puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set, open_set)
+    while open_set:
         if np.array_equal(puzzle.puzzle, puzzle_solution):
             print(puzzle.historic)
             return puzzle
-        puzzle = get_lowest_score(open_list)
-        open_list.remove(puzzle)
+        puzzle = hq.heappop(open_set)[2]
         adding_close_set(puzzle.puzzle, close_set)
-        open_list += puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set)
-    print("Probleme")
+        puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set, open_set)
+    print("Problem")
 
 
 def puzzle_gen(size):
