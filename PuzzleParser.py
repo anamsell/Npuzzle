@@ -1,5 +1,6 @@
 import PyKit
 import numpy as np
+from Puzzle import Puzzle
 
 def get_puzzle_from_file_name(file_name):
     file_content = PyKit.FileManager.get_string_from_file(file_name)
@@ -9,9 +10,9 @@ def get_puzzle_from_file_name(file_name):
     puzzle = np.zeros((n, n))
 
     del parsed_lines[0]
-    
+
     for (index, line) in enumerate(parsed_lines):
         np_line = np.fromstring(line, dtype=int, sep=" ")
         puzzle[index] = np_line
 
-    return puzzle
+    return Puzzle(puzzle, n)
