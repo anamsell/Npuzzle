@@ -1,5 +1,4 @@
 import numpy as np
-import itertools
 
 
 def unidimensional_array(puzzle_array):
