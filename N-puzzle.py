@@ -41,14 +41,14 @@ def puzzle_moves(puzzle_original, size, f, indexes_solution, close_set, open_set
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x - 1, y]
         new_puzzle.puzzle[x - 1, y] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'D')
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'U')
             hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
     if x != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
         new_puzzle.puzzle[x, y] = new_puzzle.puzzle[x + 1, y]
         new_puzzle.puzzle[x + 1, y] = 0
         if not is_in_close_set(new_puzzle.puzzle, close_set):
-            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'U')
+            new_puzzle = State(new_puzzle.puzzle, f, indexes_solution, puzzle_original.historic + 'D')
             hq.heappush(open_set, (new_puzzle.score, new_puzzle.historic, new_puzzle))
     if y != size - 1:
         new_puzzle = copy.deepcopy(puzzle_original)
