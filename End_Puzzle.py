@@ -12,7 +12,7 @@ def puzzle_solution_generator(size):
     max_y = size
     for n in range(1, size * size):
         puzzle_solution[y * size + x] = n
-        indexes_list.append((x, y))
+        indexes_list.append((y, x))
         if x + ix == max_x:
             ix = 0
             iy = 1
