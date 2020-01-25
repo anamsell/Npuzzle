@@ -1,7 +1,8 @@
 import numpy as np
 
+
 class State:
-    def __init__(self, puzzle, f, indexes_solution, historic):
+    def __init__(self, puzzle, historic, f=(lambda x, y: 0), indexes_solution=0):
         self.puzzle = puzzle
         self.score = f(puzzle, indexes_solution) + len(historic)
         self.historic = historic
