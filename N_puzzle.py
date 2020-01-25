@@ -5,6 +5,7 @@ import A_star
 import numpy as np
 import Uniform_cost_search
 import Greedy_search
+import Display_solution
 
 
 def puzzle_gen(size):
@@ -60,20 +61,16 @@ def parser(filename):
         exit()
 
 
-def Correct_display(result):
-    exit()
-
-
 def main():
     if len(sys.argv) != 2:
         exit()
     puzzle, size = parser(sys.argv[1])
     puzzle_solution, indexes_solution = puzzle_solution_generator(size)
-    # result = A_star.resolve(puzzle, size, puzzle_solution, Heuristic.linear_conflict_and_manhattan, indexes_solution)
+    result = A_star.resolve(puzzle, size, puzzle_solution, Heuristic.linear_conflict_and_manhattan, indexes_solution)
     # result = Uniform_cost_search.resolve(puzzle, size, puzzle_solution)
-    result = Greedy_search.resolve(puzzle, size, puzzle_solution, Heuristic.manhattan_distance, indexes_solution)
-    print(result)
-    Correct_display(result)
+    # result = Greedy_search.resolve(puzzle, size, puzzle_solution, Heuristic.manhattan_distance, indexes_solution)
+    result[0].puzzle = puzzle
+    Display_solution.start(*result)
 
 
 if __name__ == "__main__":
