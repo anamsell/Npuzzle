@@ -1,15 +1,21 @@
 import PyKit
 import PuzzleParser
 import PuzzleChecker
+import A_star
+import Uniform_cost_search
+import Greedy_search
+import Display_solution
+import Heuristic
+from End_Puzzle import puzzle_solution_generator
 
 
 def heuristic_function(flag_value):
     if flag_value == "hamming":
-        return "lol"
+        return Heuristic.hamming_distance
     elif flag_value == "manhattan":
-        return "lol"
+        return Heuristic.manhattan_distance
     elif flag_value == "linear":
-        return "lol"
+        return Heuristic.linear_conflict_and_manhattan
     else:
         return None
 
@@ -29,3 +35,11 @@ if __name__ == "__main__":
     
     if not PuzzleChecker.is_puzzle_solvable(puzzle):
         PyKit.Display.error("This puzzle is not solvable.")
+
+    puzzle_solution, indexes_solution = puzzle_solution_generator(puzzle.dimension)
+    result = A_star.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function,
+                            indexes_solution)
+    # result = Uniform_cost_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution)
+    # result = Greedy_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
+    result[0].puzzle = puzzle.puzzle
+    Display_solution.start(*result)
