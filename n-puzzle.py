@@ -37,9 +37,8 @@ if __name__ == "__main__":
         PyKit.Display.error("This puzzle is not solvable.")
 
     puzzle_solution, indexes_solution = puzzle_solution_generator(puzzle.dimension)
-    result = A_star.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function,
-                            indexes_solution)
+    # result = A_star.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
     # result = Uniform_cost_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution)
-    # result = Greedy_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
+    result = Greedy_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
     result[0].puzzle = puzzle.puzzle
     Display_solution.start(*result)
