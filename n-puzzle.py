@@ -35,27 +35,33 @@ def resolve_algorithm(flag_value, puzzle, puzzle_solution, function, indexes_sol
 
 if __name__ == "__main__":
     PyKit.CommandLine.register_usage("usage: python n-puzzle [file_name]")
-    PyKit.CommandLine.register_flag("h", "The heurisitic function that will be used to solve the puzzle. Can use hamming, manhattan or linear. Default is manhattan.", default_value="manhattan")
-    PyKit.CommandLine.register_flag("a", "The algorithm that will be used to solve the puzzle. Can use a*, uniform_cost or greedy_search. Default is a*.", default_value="a*")
+    PyKit.CommandLine.register_flag("h",
+                                    "The heurisitic function that will be used to solve the puzzle. Can use hamming, manhattan or linear. Default is manhattan.",
+                                    default_value="manhattan")
+    PyKit.CommandLine.register_flag("a",
+                                    "The algorithm that will be used to solve the puzzle. Can use a*, uniform_cost or greedy_search. Default is a*.",
+                                    default_value="a*")
     PyKit.CommandLine.show_usage_if_needed()
 
     file_name = PyKit.CommandLine.get_argument_at_index(1)
     heuristic = PyKit.CommandLine.get_value_for_flag("h")
 
-    if file_name.isdigit() and int(file_name) > 2:
+    if file_name.isdigit():
+        if int(file_name) < 3:
+            PyKit.Display.error("Puzzle dimension should be greater then 2.")
         dimension = int(file_name)
-        puzzle_array = PuzzleParser.puzzle_gen(dimension)
-        puzzle = Puzzle(puzzle_array, dimension)
+        while True:
+            puzzle_array = PuzzleParser.puzzle_gen(dimension)
+            puzzle = Puzzle(puzzle_array, dimension)
+            if PuzzleChecker.is_puzzle_solvable(puzzle):
+                break
     else:
-        try:
-            puzzle = PuzzleParser.get_puzzle_from_file_name(file_name)
-        except:
-            PyKit.Display.error("This puzzle is not correctly formatted.")
-    
+        puzzle = PuzzleParser.get_puzzle_from_file_name(file_name)
+
     function = heuristic_function(heuristic)
     if function is None:
         PyKit.Display.error(heuristic + " is not a valid heuristic function. Use hamming, manhattan or linear.")
-    
+
     if not PuzzleChecker.is_puzzle_solvable(puzzle):
         PyKit.Display.error("This puzzle is not solvable.")
 
@@ -63,10 +69,10 @@ if __name__ == "__main__":
 
     algo = PyKit.CommandLine.get_value_for_flag("a")
 
-    try:
-        result = resolve_algorithm(algo, puzzle, puzzle_solution, function, indexes_solution)
-    except:
-        PyKit.Display.error("This puzzle is not correctly formatted.")
+    # try:
+    result = resolve_algorithm(algo, puzzle, puzzle_solution, function, indexes_solution)
+    # except:
+    #     PyKit.Display.error("This puzzle is not correctly formatted.")
 
     if (result is None):
         PyKit.Display.error(algo + " is not a valid algorithm. Use a*, uniform_cost or greedy_search")
