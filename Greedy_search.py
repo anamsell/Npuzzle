@@ -70,11 +70,13 @@ def puzzle_moves(puzzle_original, size, f, indexes_solution, close_set):
 
 def resolve(puzzle, size, puzzle_solution, function_heuristic, indexes_solution):
     time_complexity = 0
+    size_complexity = 0
     puzzle = State(puzzle, '', function_heuristic, indexes_solution)
     close_set = dict()
     adding_close_set_greedy_uniform(puzzle.puzzle, close_set)
     while not np.array_equal(puzzle.puzzle, puzzle_solution):
         time_complexity += 1
+        size_complexity = 4
         adding_close_set_greedy_uniform(puzzle.puzzle, close_set)
         puzzle = puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set)
-    return puzzle, time_complexity, 4
+    return puzzle, time_complexity, size_complexity

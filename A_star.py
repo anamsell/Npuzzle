@@ -41,16 +41,18 @@ def resolve(puzzle, size, puzzle_solution, function_heuristic, indexes_solution)
     time_complexity = 0
     size_complexity = 0
     puzzle = State(puzzle, '', function_heuristic, indexes_solution)
+    if np.array_equal(puzzle.puzzle, puzzle_solution):
+        return puzzle, time_complexity, size_complexity
     close_set = dict()
     open_set = []
     adding_close_set(puzzle.puzzle, close_set, len(puzzle.historic))
     puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set, open_set)
     while open_set:
-        time_complexity += 1
         if len(open_set) > size_complexity:
             size_complexity = len(open_set)
         if np.array_equal(puzzle.puzzle, puzzle_solution):
             return puzzle, time_complexity, size_complexity
+        time_complexity += 1
         puzzle = heapq.heappop(open_set)[2]
         adding_close_set(puzzle.puzzle, close_set, len(puzzle.historic))
         puzzle_moves(puzzle, size, function_heuristic, indexes_solution, close_set, open_set)

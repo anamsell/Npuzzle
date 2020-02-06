@@ -43,7 +43,7 @@ def resolve(puzzle, size, puzzle_solution):
     size_complexity = 0
     puzzles = [State(puzzle, '')]
     if np.array_equal(puzzles[0].puzzle, puzzle_solution):
-        return puzzle, 0, 0
+        return puzzles[0], time_complexity, size_complexity
     close_set = dict()
     open_set = []
     adding_close_set_greedy_uniform(puzzles[0].puzzle, close_set)
