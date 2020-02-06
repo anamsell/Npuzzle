@@ -6,7 +6,6 @@ import Uniform_cost_search
 import Greedy_search
 import Display_solution
 import Heuristic
-import numpy as np
 from Puzzle import Puzzle
 from End_Puzzle import puzzle_solution_generator
 
@@ -69,12 +68,9 @@ if __name__ == "__main__":
 
     algo = PyKit.CommandLine.get_value_for_flag("a")
 
-    # try:
     result = resolve_algorithm(algo, puzzle, puzzle_solution, function, indexes_solution)
-    # except:
-    #     PyKit.Display.error("This puzzle is not correctly formatted.")
 
-    if (result is None):
+    if result is None:
         PyKit.Display.error(algo + " is not a valid algorithm. Use a*, uniform_cost or greedy_search")
 
     result[0].puzzle = puzzle.puzzle
