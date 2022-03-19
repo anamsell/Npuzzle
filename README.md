@@ -33,9 +33,9 @@ python3 N-puzzle
 ```
 
 ## Notes
-###Algorithms
+### Algorithms
 * Greedy_Search look for the best move according to the heuristic and make it (very low size complexity, high time complexity, inaccurate result)
-* A* store all his possibles next moves and choose the best move according to the heuristic (decent size complexity, low time complexity and good result)
+* A* store add his next possibles moves to an open list and choose the best move according to the heuristic and the number of move to get this situation (decent size complexity, low time complexity and good result)
 * Uniform_Cost operate in a brute-force way. Don't use any heuristic and just try all sequence of moves (that make sense) with the lowest cost until it find a solution (very high size complexity, very high time complexity and best possible result). 
 
 ### Heuristics
