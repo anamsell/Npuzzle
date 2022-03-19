@@ -22,7 +22,7 @@ pip3 install numpy
 
 ### Examples
 ```
-python3 N_puzzle.py test/solvable/test2 -h linear -a uniform_cost
+python3 N_puzzle.py test/solvable/test2 -h Greedy_Search -a uniform_cost
 python3 N_puzzle.py test/unsolvable/test4
 python3 N_puzzle.py test/invalid/test4
 ```
