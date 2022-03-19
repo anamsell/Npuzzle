@@ -11,29 +11,29 @@ from End_Puzzle import puzzle_solution_generator
 
 
 def heuristic_function(flag_value):
-    if flag_value == "hamming":
+    if flag_value.lower() == "hamming":
         return Heuristic.hamming_distance
-    elif flag_value == "manhattan":
+    elif flag_value.lower() == "manhattan":
         return Heuristic.manhattan_distance
-    elif flag_value == "linear":
+    elif flag_value.lower() == "linear":
         return Heuristic.linear_conflict_and_manhattan
     else:
         return None
 
 
 def resolve_algorithm(flag_value, puzzle, puzzle_solution, function, indexes_solution):
-    if flag_value == "a*":
+    if flag_value.lower() == "a*":
         return A_star.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
-    elif flag_value == "uniform_cost":
+    elif flag_value.lower() == "uniform_cost":
         return Uniform_cost_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution)
-    elif flag_value == "greedy_search":
+    elif flag_value.lower() == "greedy_search":
         return Greedy_search.resolve(puzzle.puzzle, puzzle.dimension, puzzle_solution, function, indexes_solution)
     else:
         return None
 
 
 if __name__ == "__main__":
-    PyKit.CommandLine.register_usage("usage: python n-puzzle [file_name]")
+    PyKit.CommandLine.register_usage("usage: python N_puzzle [file_name]")
     PyKit.CommandLine.register_flag("h",
                                     "The heurisitic function that will be used to solve the puzzle. Can use hamming, manhattan or linear. Default is manhattan.",
                                     default_value="manhattan")
