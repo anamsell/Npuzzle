@@ -13,8 +13,8 @@ Look at subject.pdf for more information
 ## Setup
 
 ```
-git clone https://github.com/Gleonett/DSLR.git
-cd DSLR
+git clone https://github.com/anamsell/Npuzzle.git Npuzzle
+cd Npuzzle
 pip3 install numpy
 ```
 
